@@ -71,6 +71,7 @@ _addDevice = do
     Nothing -> failure
     Just _ -> text "ok"
 
+
 _addLocation :: ActionT Text MotoTransformer ()
 _addLocation = do
   tagid <- stringParam "id"
@@ -79,6 +80,8 @@ _addLocation = do
     Nothing-> failure
     Just _ -> text "ok"
 
+
+-- | Starts the scotty server wit hthe appropriate registered routes
 runRest :: IO ()
 runRest = do
   print "Please beam me up Scotty"
