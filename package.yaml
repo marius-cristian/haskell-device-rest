@@ -1,0 +1,77 @@
+name:                motorola-challenge
+version:             0.1.0.0
+github:              "marius-cristian/motorola-challenge"
+license:             BSD3
+author:              "Marius-Florin Cristian"
+maintainer:          "mfc@marius-cristian.com"
+copyright:           "2019 Marius-Florin Cristian"
+
+extra-source-files:
+- README.md
+- ChangeLog.md
+
+# Metadata used when publishing your package
+# synopsis:            Short description of your package
+# category:            Web
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Please see the README on GitHub at <https://github.com/marius-cristian/motorola-challenge#readme>
+
+dependencies:
+  - aeson
+  - base
+  - bson
+  - bson-generic
+  - mongoDB
+  - scotty
+  - resource-pool
+  - bytestring
+  - text
+  - mtl
+  - string-conversions
+  - wai
+  - wai-cors
+  - wai-extra
+  - http-types
+
+library:
+  source-dirs:
+    - src
+    - src/api
+    - src/config
+    - src/environment
+    - src/utils
+
+executables:
+  motorola-challenge-exe:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    - -fwarn-unused-imports
+    - -fwarn-tabs
+    - -fwarn-incomplete-uni-patterns
+    - -fwarn-overlapping-patterns
+    - -fwarn-incomplete-record-updates
+    - -fdefer-type-errors
+    dependencies:
+    - motorola-challenge
+
+
+
+tests:
+  motorola-challenge-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - motorola-challenge
+    - tasty
+    - tasty-hunit

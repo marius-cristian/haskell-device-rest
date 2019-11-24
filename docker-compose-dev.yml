@@ -1,0 +1,17 @@
+version: '3'
+services:
+  mongo:
+    image: mongo:3.4.3
+    ports:
+      - 27017:27017
+    volumes:
+        - ~/db:/data/db
+
+  haskell:
+    image: haskell:latest
+    command: bash -c "chown root /root -R  && cd /app && ./run-dev.sh"
+    ports:
+      - 80:80
+    volumes:
+      - .:/app
+      -  ~/.root:/root

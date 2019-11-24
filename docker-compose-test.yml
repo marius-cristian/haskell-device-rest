@@ -1,0 +1,17 @@
+version: '3'
+services:
+  mongo:
+    image: mongo:3.4.3
+    ports:
+      - 27017:27017
+# for the tests, use a detached db. dont save the state
+
+  haskell:
+    image: haskell:latest
+    command: bash -c "chown root /root -R  && cd /app && ./run-test.sh ${test}"
+
+    ports:
+      - 3000:80
+    volumes:
+      - .:/app
+      - ./.root:/root
