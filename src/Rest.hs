@@ -17,7 +17,7 @@ module Rest where
 import           Environment
 import           Web.Scotty.Trans
 import           Data.String (fromString)
-import           Data.Aeson (ToJSON, FromJSON)
+import           Data.Aeson (FromJSON)
 import           Control.Monad.Except
 import           Control.Monad.Reader
 import           Data.Text.Lazy (Text)
@@ -37,6 +37,8 @@ apiGet ::
   -> ScottyT e m ()
 apiGet path f = get (fromString $ apiRoot ++ path) $ f
 
+apiPost :: (ScottyError e, MonadIO m) =>
+                 [Char] -> ActionT e m () -> ScottyT e m ()
 apiPost path f = post (fromString $ apiRoot ++ path) $ f
 
 -- | Deserialize data from json string "{object}" to the appropriate data type
@@ -54,6 +56,7 @@ withStringParam paramName f = do
 failure::ActionT Text MotoTransformer ()
 failure = json ("{error:ok}")
 
+stringParam :: Text -> ActionT Text MotoTransformer String
 stringParam p = param p:: ActionT Text MotoTransformer String
 
 _getLocation :: ActionT Text MotoTransformer ()

@@ -5,7 +5,6 @@
 module Types where
 import           Data.Aeson
 import           Data.Bson.Generic
-import           Data.Bson
 import           GHC.Generics      (Generic)
 import           Data.Data         (Typeable)
 

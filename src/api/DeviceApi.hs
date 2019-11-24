@@ -27,7 +27,6 @@ import MongoUtils
 import Database.MongoDB
 import Environment (MotoTransformer)
 import Types
-import Control.Monad.Trans
 
 findRadio :: String -> MotoTransformer (Maybe Device)
 findRadio rid = getDoc $ findOne $ select ["radioId" =: rid] "devices"
@@ -39,7 +38,7 @@ insertRadio rid payload = do
         Just _ -> return Nothing
         Nothing -> do
             let newradio = ["radioId" =: rid, "name" =: (alias payload), "allowed" =: (allowed_locations payload)]
-            run $ insert "devices" newradio
+            _ <- run $ insert "devices" newradio
             return $ Just "ok"
 
 setLocation :: String -> Location -> MotoTransformer (Maybe String)
