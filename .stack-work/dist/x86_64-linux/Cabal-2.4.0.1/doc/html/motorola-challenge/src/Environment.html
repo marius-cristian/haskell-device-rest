@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# OPTIONS_HADDOCK prune #-}</span><span>
+</span><a name="line-2"></a><span class="hs-comment">{-|
+Module      : Environment
+Description : Exposes type aliases for monad transformers, a reader monad
+              Note that it requires the environment variable motoEnv=[dev|prod]
+Copyright   : Marius-Florin Cristian
+License     : GPL-3
+Maintainer  : mfc@marius-cristian.com
+Stability   : development
+Portability : POSIX
+
+This module exposes type aliases for our reader monad that holds information such as db connection pool,
+configuration file, (maybe logger, etc.), and the monad transformers associated with it.
+-}</span><span>
+</span><a name="line-15"></a><span>
+</span><a name="line-16"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Environment</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-17"></a><span class="hs-keyword">import</span><span> </span><a href="Config.html"><span class="hs-identifier">Config</span></a><span>
+</span><a name="line-18"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Control.Monad.Reader</span><span>
+</span><a name="line-19"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Data.Pool</span><span>
+</span><a name="line-20"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Data.Text.Lazy</span><span> </span><span class="hs-special">(</span><span class="hs-identifier hs-type">Text</span><span class="hs-special">)</span><span>
+</span><a name="line-21"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Web.Scotty.Trans</span><span>
+</span><a name="line-22"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Database.MongoDB</span><span>
+</span><a name="line-23"></a><span>
+</span><a name="line-24"></a><span class="hs-keyword">type</span><span> </span><a name="MotoTransformer"><a href="Environment.html#MotoTransformer"><span class="hs-identifier">MotoTransformer</span></a></a><span>   </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier hs-type">ReaderT</span><span> </span><a href="Environment.html#Environment"><span class="hs-identifier hs-type">Environment</span></a><span> </span><span class="hs-identifier hs-type">IO</span><span>
+</span><a name="line-25"></a><span class="hs-keyword">type</span><span> </span><a name="ScottyTransformer"><a href="Environment.html#ScottyTransformer"><span class="hs-identifier">ScottyTransformer</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier hs-type">ScottyT</span><span> </span><span class="hs-identifier hs-type">Text</span><span> </span><a href="Environment.html#MotoTransformer"><span class="hs-identifier hs-type">MotoTransformer</span></a><span>
+</span><a name="line-26"></a><span class="hs-keyword">type</span><span> </span><a name="ActionTransformer"><a href="Environment.html#ActionTransformer"><span class="hs-identifier">ActionTransformer</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier hs-type">ActionT</span><span> </span><span class="hs-identifier hs-type">Text</span><span> </span><a href="Environment.html#MotoTransformer"><span class="hs-identifier hs-type">MotoTransformer</span></a><span>
+</span><a name="line-27"></a><span>
+</span><a name="line-28"></a><span>
+</span><a name="line-29"></a><span class="hs-identifier">getDbPool</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="Environment.html#MotoTransformer"><span class="hs-identifier hs-type">MotoTransformer</span></a><span> </span><span class="hs-special">(</span><span class="hs-identifier hs-type">Pool</span><span> </span><span class="hs-identifier hs-type">Pipe</span><span class="hs-special">)</span><span>
+</span><a name="line-30"></a><a name="getDbPool"><a href="Environment.html#getDbPool"><span class="hs-identifier">getDbPool</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier hs-var">asks</span><span> </span><span class="hs-identifier">dbPool</span><span>
+</span><a name="line-31"></a><span>
+</span><a name="line-32"></a><span class="hs-identifier">getConfig</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="Environment.html#MotoTransformer"><span class="hs-identifier hs-type">MotoTransformer</span></a><span> </span><a href="Config.html#Configuration"><span class="hs-identifier hs-type">Configuration</span></a><span>
+</span><a name="line-33"></a><a name="getConfig"><a href="Environment.html#getConfig"><span class="hs-identifier">getConfig</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier hs-var">asks</span><span> </span><span class="hs-identifier">config</span><span>
+</span><a name="line-34"></a><span>
+</span><a name="line-35"></a><span class="hs-keyword">data</span><span> </span><a name="Environment"><a href="Environment.html#Environment"><span class="hs-identifier">Environment</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a name="Environment"><a href="Environment.html#Environment"><span class="hs-identifier">Environment</span></a></a><span class="hs-special">{</span><span>
+</span><a name="line-36"></a><span>      </span><a name="dbPool"><a href="Environment.html#dbPool"><span class="hs-identifier">dbPool</span></a></a><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier hs-type">Pool</span><span> </span><span class="hs-identifier hs-type">Pipe</span><span>
+</span><a name="line-37"></a><span>    </span><span class="hs-special">,</span><span> </span><a name="config"><a href="Environment.html#config"><span class="hs-identifier">config</span></a></a><span> </span><span class="hs-glyph">::</span><span> </span><a href="Config.html#Configuration"><span class="hs-identifier hs-type">Configuration</span></a><span>
+</span><a name="line-38"></a><span class="hs-special">}</span><span>
+</span><a name="line-39"></a></pre></body></html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# OPTIONS_HADDOCK prune #-}</span><span>
+</span><a name="line-2"></a><span class="hs-comment">{-|
+Module      : CreateEnvironment
+Description : Exposes a method for creating an envrionment
+              Note that it requires the environment variable motoEnv=[dev|prod]
+Copyright   : Marius-Florin Cristian
+License     : GPL-3
+Maintainer  : mfc@marius-cristian.com
+Stability   : development
+Portability : POSIX
+
+This module populates the reader monad with the config file and db connection pool
+-}</span><span>
+</span><a name="line-14"></a><span>
+</span><a name="line-15"></a><span>
+</span><a name="line-16"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">CreateEnvironment</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-17"></a><span>
+</span><a name="line-18"></a><span class="hs-keyword">import</span><span> </span><a href="Environment.html"><span class="hs-identifier">Environment</span></a><span>
+</span><a name="line-19"></a><span class="hs-keyword">import</span><span> </span><a href="Config.html"><span class="hs-identifier">Config</span></a><span>
+</span><a name="line-20"></a><span class="hs-keyword">import</span><span> </span><a href="MongoUtils.html"><span class="hs-identifier">MongoUtils</span></a><span> </span><span class="hs-special">(</span><a href="MongoUtils.html#getPool"><span class="hs-identifier hs-var">getPool</span></a><span class="hs-special">)</span><span>
+</span><a name="line-21"></a><span>
+</span><a name="line-22"></a><span class="hs-comment">-- | Creates an environment.</span><span>
+</span><a name="line-23"></a><span class="hs-identifier">createEnvironment</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier hs-type">IO</span><span> </span><a href="Environment.html#Environment"><span class="hs-identifier hs-type">Environment</span></a><span>
+</span><a name="line-24"></a><a name="createEnvironment"><a href="CreateEnvironment.html#createEnvironment"><span class="hs-identifier">createEnvironment</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><a name="line-25"></a><span>  </span><a name="local-6989586621679112043"><a href="#local-6989586621679112043"><span class="hs-identifier">conf</span></a></a><span> </span><span class="hs-glyph">&lt;-</span><span> </span><a href="Config.html#configuration"><span class="hs-identifier hs-var">configuration</span></a><span>
+</span><a name="line-26"></a><span>  </span><span class="hs-keyword">case</span><span> </span><a href="#local-6989586621679112043"><span class="hs-identifier hs-var">conf</span></a><span> </span><span class="hs-keyword">of</span><span>
+</span><a name="line-27"></a><span>    </span><span class="hs-identifier hs-var">Nothing</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier hs-var">fail</span><span> </span><span class="hs-string">&quot;No configuration found for MotoProject&quot;</span><span>
+</span><a name="line-28"></a><span>    </span><span class="hs-identifier hs-var">Just</span><span> </span><a name="local-6989586621679112044"><a href="#local-6989586621679112044"><span class="hs-identifier">c</span></a></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">do</span><span>
+</span><a name="line-29"></a><span>      </span><a name="local-6989586621679112045"><a href="#local-6989586621679112045"><span class="hs-identifier">pool</span></a></a><span> </span><span class="hs-glyph">&lt;-</span><span> </span><a href="MongoUtils.html#getPool"><span class="hs-identifier hs-var">getPool</span></a><span> </span><a href="#local-6989586621679112044"><span class="hs-identifier hs-var">c</span></a><span>
+</span><a name="line-30"></a><span>      </span><span class="hs-identifier hs-var">return</span><span> </span><span class="hs-operator hs-var">$</span><span> </span><a href="Environment.html#Environment"><span class="hs-identifier hs-var">Environment</span></a><span> </span><a href="#local-6989586621679112045"><span class="hs-identifier hs-var">pool</span></a><span> </span><a href="#local-6989586621679112044"><span class="hs-identifier hs-var">c</span></a></pre></body></html>
